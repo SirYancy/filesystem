@@ -404,7 +404,20 @@ int Kernel::creat( char * pathname , short mode )
 	return open(fileDescriptor) ;
 }
 
-static int link( char * ePathname, char * nPathname);
+static int link( char * ePathname, char * nPathname)
+{
+    char * efullpath = getFullPath(ePathname);
+    char * nfullpath = getFullPath(nPathname);
+
+    char dirname[1024];
+    memset(dirname, '\0', 1024);
+    strcpy(dirname,"/");
+
+    FileSystem * fileSystem = openFileSystems;
+
+    IndexNode indexNode;
+    short 
+}
 
 /**
  * Terminate the current "process".  Any open files will be closed.
