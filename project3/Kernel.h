@@ -66,6 +66,8 @@ class Kernel
 		static void exit( int status );
 		static int lseek( int fd , int offset , int whence );
 
+        static int link( char * ePathname, char * nPathname);
+
 		const static int O_RDONLY = 0 ;
 		const static int O_WRONLY = 1 ;
 		const static int O_RDWR = 2 ;

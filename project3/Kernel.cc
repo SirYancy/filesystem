@@ -404,6 +404,8 @@ int Kernel::creat( char * pathname , short mode )
 	return open(fileDescriptor) ;
 }
 
+static int link( char * ePathname, char * nPathname);
+
 /**
  * Terminate the current "process".  Any open files will be closed.
  * <p>

@@ -45,10 +45,6 @@ int main(int argc, char ** argv)
 		Kernel::exit( 2 ) ;
 	}
 
-	// create a buffer for reading from standard input
-//	char buffer[BUF_SIZE] ;
-//	memset(buffer, '\0', BUF_SIZE);
-
 	char c;
 
 	// while we can, read from standard input
