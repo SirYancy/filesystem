@@ -404,19 +404,85 @@ int Kernel::creat( char * pathname , short mode )
 	return open(fileDescriptor) ;
 }
 
-static int link( char * ePathname, char * nPathname)
+int Kernel::link( char * oldPath, char * newPath)
 {
-    char * efullpath = getFullPath(ePathname);
-    char * nfullpath = getFullPath(nPathname);
+    char * oldfullpath = getFullPath(oldPath);
+    char * newfullpath = getFullPath(newPath);
 
     char dirname[1024];
     memset(dirname, '\0', 1024);
     strcpy(dirname,"/");
 
-    FileSystem * fileSystem = openFileSystems;
+    FileSystem * fs = openFileSystems;
 
-    IndexNode indexNode;
-    short 
+    IndexNode oldIndexNode;
+    short oldINodeNumber = findIndexNode(oldPath, oldIndexNode);
+
+    if( oldINodeNumber < 0)
+    {
+        return -1;
+    }
+
+    FileDescriptor * fd = new FileDescriptor(
+            openFileSystems, oldIndexNode, 0);
+
+    fd->setIndexNodeNumber( oldINodeNumber );
+
+    IndexNode currIndexNode;
+    IndexNode prevIndexNode;
+    IndexNode emptyIndexNode;
+    getRootIndexNode()->copy(currIndexNode);
+
+    short indexNodeNumber = FileSystem::ROOT_INDEX_NODE_NUMBER;
+
+	char * token = NULL;
+	token = strtok(oldfullpath, "/");
+	char name[512];// = "." ; // start at root node
+	memset(name, '\0', 512);
+	strcpy(name, ".");	//may be not needed. 
+
+	while(1)
+	{
+		if(token != NULL)
+		{
+			memset(name, '\0', 512);
+			strcpy(name, token);
+
+//			cout << name << endl;
+			// check to see if the current node is a directory
+
+//			cout <<currIndexNode.toString() << endl;
+
+			if((currIndexNode.getMode()&S_IFMT) != S_IFDIR)
+			{
+				// return (ENOTDIR) if a needed directory is not a directory
+				process.errno = ENOTDIR ;
+				return -1 ;
+			}
+
+			// get the next inode corresponding to the token
+			currIndexNode.copy(prevIndexNode);
+		
+			//Init CurIndexNode
+			emptyIndexNode.copy(currIndexNode);
+			//prevIndexNode = currIndexNode ;
+			//   currIndexNode = new IndexNode() ;
+			indexNodeNumber = findNextIndexNode(openFileSystems, prevIndexNode, name, currIndexNode);
+		}
+		else
+		{
+			break;
+		}
+
+		token = strtok(NULL, "/");
+
+		if(token != NULL)	
+		{
+			strcat(dirname, name);	
+			strcat(dirname, "/");
+		}
+	}
+    cout << dirname << endl;
 }
 
 /**

@@ -96,7 +96,7 @@ init	ProcessContext.cc	/^void ProcessContext::init(short newUid , short newGid ,
 initialize	Kernel.cc	/^bool Kernel::initialize()$/;"	f	class:Kernel
 isBitSet	BitBlock.cc	/^bool BitBlock::isBitSet(int whichBit)$/;"	f	class:BitBlock
 is_ready	FileSystem.cc	/^bool FileSystem::is_ready()$/;"	f	class:FileSystem
-link	Kernel.cc	/^static int link( char * ePathname, char * nPathname)$/;"	f	file:
+link	Kernel.cc	/^static int link( char * oldPath, char * newPath)$/;"	f	file:
 loadFreeListBlock	FileSystem.cc	/^void FileSystem::loadFreeListBlock(int dataBlockNumber)$/;"	f	class:FileSystem
 loadIndexNodeBlock	FileSystem.cc	/^void FileSystem::loadIndexNodeBlock(short indexNodeNumber)$/;"	f	class:FileSystem
 lseek	Kernel.cc	/^int Kernel::lseek( int fd , int offset , int whence )$/;"	f	class:Kernel
