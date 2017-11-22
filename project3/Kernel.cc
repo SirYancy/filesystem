@@ -182,10 +182,6 @@ int Kernel::creat( char * pathname , short mode )
 	IndexNode emptyIndexNode;
 	getRootIndexNode()->copy(currIndexNode);
 
-//out << "CurIndexNode " << currIndexNode.toString() << endl;
-
-//	cout << currIndexNode.toString();
-
 	short indexNodeNumber = FileSystem::ROOT_INDEX_NODE_NUMBER ;
 
 	char * token = NULL;
@@ -201,10 +197,7 @@ int Kernel::creat( char * pathname , short mode )
 			memset(name, '\0', 512);
 			strcpy(name, token);
 
-//			cout << name << endl;
 			// check to see if the current node is a directory
-
-//			cout <<currIndexNode.toString() << endl;
 
 			if((currIndexNode.getMode()&S_IFMT) != S_IFDIR)
 			{
@@ -238,7 +231,7 @@ int Kernel::creat( char * pathname , short mode )
 
 	// ??? we need to set some fields in the file descriptor
 
-	int flags = O_WRONLY ; // ???
+	int flags = O_WRONLY ; 
 	FileDescriptor * fileDescriptor = NULL;
 
 	if ( indexNodeNumber < 0 )
@@ -269,11 +262,7 @@ int Kernel::creat( char * pathname , short mode )
 		// assign inode for the new file
 		fileDescriptor->setIndexNodeNumber( newInode ) ;
 
-		// System.out.println( "newInode = " + newInode ) ;
 		// open the directory
-		// ??? it would be nice if we had an "open" that took an inode 
-		// instead of a name for the dir
-		// System.out.println( "dirname = " + dirname.toString() ) ;
 //		cout << "dir name and name " << dirname << " " << name << endl;
 		int dir = open(dirname , O_RDWR);
 		if( dir < 0 )
@@ -404,28 +393,172 @@ int Kernel::creat( char * pathname , short mode )
 	return open(fileDescriptor) ;
 }
 
-int Kernel::link( char * oldpathname, char * newpathname)
+int Kernel::link( char * oldPathName, char * newPathName)
 {
-    char * fullpath = getFullPath(oldpathname);
+    char * fullPath = getFullPath(oldPathName);
 
-    IndexNode oldIndexNode;
-    short oldINodeNumber = findIndexNode(oldpathname, oldIndexNode);
+    cout << fullPath << endl;
 
-    if( oldINodeNumber < 0)
+    IndexNode inode;
+    short oldIndexNodeNumber = findIndexNode(oldPathName, inode);
+
+    cout << "Old inode number: " << oldIndexNodeNumber << endl;
+
+    if( oldIndexNodeNumber < 0)
     {
         return -1;
     }
 
-    char * newfullpath = getFullPath(newpathname);
+    // Next we need to deterimine if the file already exists
+    // And parse the directory name
+    getFullPath(newPathName);
+    cout << fullPath << endl;
 
-    char dirname[1024];
-    memset(dirname, '\0', 1024);
-    strcpy(dirname,"/");
+	char dirname[1024];
+	memset(dirname, '\0', 1024);
+	strcpy(dirname, "/" );
 
-    FileSystem * fs = openFileSystems;
+	FileSystem * fileSystem = openFileSystems;
+	IndexNode currIndexNode;
+	IndexNode prevIndexNode;
+	IndexNode emptyIndexNode;
+	getRootIndexNode()->copy(currIndexNode);
 
+	short indexNodeNumber = FileSystem::ROOT_INDEX_NODE_NUMBER ;
 
+	char * token = NULL;
+	token = strtok(fullPath, "/");
+	char name[512];// = "." ; // start at root node
+	memset(name, '\0', 512);
+	strcpy(name, ".");	//may be not needed. 
+	while(1)
+	{
+		if(token != NULL)
+		{
+			memset(name, '\0', 512);
+			strcpy(name, token);
+
+			// check to see if the current node is a directory
+
+			if((currIndexNode.getMode()&S_IFMT) != S_IFDIR)
+			{
+				// return (ENOTDIR) if a needed directory is not a directory
+				process.errno = ENOTDIR ;
+				return -1 ;
+			}
+
+			// get the next inode corresponding to the token
+			currIndexNode.copy(prevIndexNode);
+		
+			//Init CurIndexNode
+			emptyIndexNode.copy(currIndexNode);
+			//prevIndexNode = currIndexNode ;
+			//   currIndexNode = new IndexNode() ;
+			indexNodeNumber = findNextIndexNode(openFileSystems, prevIndexNode, name, currIndexNode);
+		}
+		else
+		{
+			break;
+		}
+
+		token = strtok(NULL, "/");
+
+		if(token != NULL)	
+		{
+			strcat(dirname, name);	
+			strcat(dirname, "/");
+		}
+	}
+
+    cout << "dirname and name: " << dirname << " " << name << endl;
+    
+	int flags = O_WRONLY ; 
+	FileDescriptor * fileDescriptor = NULL;
+
+    if(indexNodeNumber < 0)
+    {
+        //file doesn't exist, so we can make the link
+
+        //increment nlink
+        short nlink = inode.getNlink();
+        inode.setNlink(nlink + 1);
+
+        // Get the file descriptor
+        fileDescriptor = new FileDescriptor(fileSystem, inode, flags);
+
+        // open new directory
+		int dir = open(dirname , O_RDWR);
+		if( dir < 0 )
+		{
+			perror(PROGRAM_NAME);
+			cout << PROGRAM_NAME << ": unable to open directory for writing" << endl;
+			return -1;
+		}
+
+        int status = 0;
+		DirectoryEntry newDirectoryEntry(oldIndexNodeNumber, name);
+        DirectoryEntry currentDirectoryEntry;
+
+        while(true)
+        {
+            status = readdir(dir, currentDirectoryEntry);
+
+            if(status < 0)
+            {
+                cout << PROGRAM_NAME << ": error reading directory in link";
+                exit( EXIT_FAILURE);
+            }
+            else if(status == 0)
+            {
+                writedir(dir, newDirectoryEntry);
+                break;
+            }
+            else
+            {
+				// if current item > new item, write the new item in 
+				// place of the old one and break
+				if(strcmp(currentDirectoryEntry.getName(),newDirectoryEntry.getName()) > 0)
+				{
+					int seek_status = lseek(dir , -DirectoryEntry::DIRECTORY_ENTRY_SIZE, 1);
+//					cout << "lseek status" << seek_status << endl;
+					if(seek_status < 0)
+					{
+						cout << PROGRAM_NAME << ": error during seek in creat";
+						exit( EXIT_FAILURE );
+					}
+
+					writedir(dir, newDirectoryEntry);
+					break ;
+                }
+            }
+        }
+
+        DirectoryEntry nextDirectoryEntry;
+
+        while(status>0)
+        {
+            status = readdir(dir, nextDirectoryEntry);
+            if(status>0)
+            {
+
+				int seek_status = lseek(dir, -DirectoryEntry::DIRECTORY_ENTRY_SIZE, 1);
+				if( seek_status < 0 )
+				{
+					cout << PROGRAM_NAME << ": error during seek in link" ;
+					exit( EXIT_FAILURE ) ;
+				}
+			}
+            writedir(dir, currentDirectoryEntry);
+            nextDirectoryEntry.copy(currentDirectoryEntry);
+        }
+        close(dir);
+    }
+    
+    //TODO else if the file already exists???
+
+    return open(fileDescriptor);
 }
+
 
 /**
  * Terminate the current "process".  Any open files will be closed.
@@ -1018,6 +1151,7 @@ int Kernel::writedir( int fd , DirectoryEntry& dirp )
  * current ProcessContext.  If multiple processes are implemented,
  * then this variable will "point" to different processes at
  * different times.
+ */
 /**
  * Initialize the file simulator kernel.  This should be the
  * first call in any simulation program.  You can think of this
