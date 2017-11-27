@@ -248,8 +248,6 @@ void FileSystem::loadFreeListBlock(int dataBlockNumber)
  * Allocate an index node for the file system.
  * @return the inode number for the next available index node; 
  * -1 if there are no index nodes available.
- * @exception java.io.IOException if there is an exception during
- * an operation on the underlying "file system" file.
  */
 short FileSystem::allocateIndexNode() 
 {

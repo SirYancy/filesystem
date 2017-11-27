@@ -397,12 +397,12 @@ int Kernel::link( char * oldPathName, char * newPathName)
 {
     char * fullPath = getFullPath(oldPathName);
 
-    cout << fullPath << endl;
+    // cout << fullPath << endl;
 
     IndexNode inode;
     short oldIndexNodeNumber = findIndexNode(oldPathName, inode);
 
-    cout << "Old inode number: " << oldIndexNodeNumber << endl;
+    // cout << "Old inode number: " << oldIndexNodeNumber << endl;
 
     if( oldIndexNodeNumber < 0)
     {
@@ -412,7 +412,7 @@ int Kernel::link( char * oldPathName, char * newPathName)
     // Next we need to deterimine if the file already exists
     // And parse the directory name
     getFullPath(newPathName);
-    cout << fullPath << endl;
+    // cout << fullPath << endl;
 
 	char dirname[1024];
 	memset(dirname, '\0', 1024);
@@ -470,7 +470,7 @@ int Kernel::link( char * oldPathName, char * newPathName)
 		}
 	}
 
-    cout << "dirname and name: " << dirname << " " << name << endl;
+    // cout << "dirname and name: " << dirname << " " << name << endl;
     
 	int flags = O_WRONLY ; 
 	FileDescriptor * fileDescriptor = NULL;
@@ -482,6 +482,8 @@ int Kernel::link( char * oldPathName, char * newPathName)
         //increment nlink
         short nlink = inode.getNlink();
         inode.setNlink(nlink + 1);
+
+		fileSystem->writeIndexNode(&inode, oldIndexNodeNumber);
 
         // Get the file descriptor
         fileDescriptor = new FileDescriptor(fileSystem, inode, flags);
@@ -553,10 +555,116 @@ int Kernel::link( char * oldPathName, char * newPathName)
         }
         close(dir);
     }
-    
-    //TODO else if the file already exists???
+    else
+    {
+        cout << PROGRAM_NAME << ": Error. File already exists" << endl;
+            exit(EXIT_FAILURE);
+    }
+
 
     return open(fileDescriptor);
+}
+
+int Kernel::unlink( char * pathname)
+{
+    char * fullPath = getFullPath(pathname);
+
+    IndexNode inode;
+    short inodeNumber = findIndexNode(pathname, inode);
+
+    if(inodeNumber < 0)
+    {
+        return -1;
+    }
+
+	char dirname[1024];
+	memset(dirname, '\0', 1024);
+	strcpy(dirname, "/" );
+
+	FileSystem * fileSystem = openFileSystems;
+	IndexNode currIndexNode;
+	IndexNode prevIndexNode;
+	IndexNode emptyIndexNode;
+	getRootIndexNode()->copy(currIndexNode);
+
+	short indexNodeNumber = FileSystem::ROOT_INDEX_NODE_NUMBER ;
+
+	char * token = NULL;
+	token = strtok(fullPath, "/");
+	char name[512];// = "." ; // start at root node
+	memset(name, '\0', 512);
+	strcpy(name, ".");	//may be not needed. 
+	while(1)
+	{
+		if(token != NULL)
+		{
+			memset(name, '\0', 512);
+			strcpy(name, token);
+
+			// check to see if the current node is a directory
+
+			if((currIndexNode.getMode()&S_IFMT) != S_IFDIR)
+			{
+				// return (ENOTDIR) if a needed directory is not a directory
+				process.errno = ENOTDIR ;
+				return -1 ;
+			}
+
+			// get the next inode corresponding to the token
+			currIndexNode.copy(prevIndexNode);
+		
+			//Init CurIndexNode
+			emptyIndexNode.copy(currIndexNode);
+			//prevIndexNode = currIndexNode ;
+			//   currIndexNode = new IndexNode() ;
+			indexNodeNumber = findNextIndexNode(openFileSystems, prevIndexNode, name, currIndexNode);
+		}
+		else
+		{
+			break;
+		}
+
+		token = strtok(NULL, "/");
+
+		if(token != NULL)	
+		{
+			strcat(dirname, name);	
+			strcat(dirname, "/");
+		}
+	}
+
+    int flags = O_WRONLY ;
+    FileDescriptor * fileDescriptor = NULL;
+
+    if(indexNodeNumber < 0)
+    {
+        cout << PROGRAM_NAME << ": Unable to unlik. File doesn't exist" << endl;
+        exit(EXIT_FAILURE);
+    }
+
+    /*
+    short nlink = inode.getNlink();
+    inode.setNlink(nlink - 1);
+
+    if(nlink <= 1)
+    {
+        //TODO Delete the file
+
+    }
+
+    */
+    fileDescriptor = new FileDescriptor(fileSystem, inode, flags);
+
+    int dir = open(dirname, O_RDWR);
+    if (dir < 0)
+    {
+        perror(PROGRAM_NAME);
+        cout << PROGRAM_NAME << ": Unable to open directory" << endl;
+        return -1;
+    }
+
+    int status = 0;
+
 }
 
 

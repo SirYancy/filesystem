@@ -6,7 +6,7 @@ debug: GCCFLAGS += -g
 debug: $(OBJECTS)
 debug: all
 
-all: mkfs ls cat tee ln cp dump mkdir
+all: mkfs ls cat tee ln rm cp dump mkdir
 
 cp: cp.cc Kernel.o IndexNode.o FileDescriptor.o DirectoryEntry.o ProcessContext.o FileSystem.o Stat.o BitBlock.o Block.o SuperBlock.o
 	$(GCC) $(GCCFLAGS) cp.cc Kernel.o IndexNode.o FileDescriptor.o DirectoryEntry.o ProcessContext.o FileSystem.o Stat.o BitBlock.o Block.o SuperBlock.o -o cp
@@ -16,6 +16,9 @@ tee: tee.cc Kernel.o IndexNode.o FileDescriptor.o DirectoryEntry.o ProcessContex
 
 ln: ln.cc Kernel.o IndexNode.o FileDescriptor.o DirectoryEntry.o ProcessContext.o FileSystem.o Stat.o BitBlock.o Block.o SuperBlock.o
 	$(GCC) $(GCCFLAGS) ln.cc Kernel.o IndexNode.o FileDescriptor.o DirectoryEntry.o ProcessContext.o FileSystem.o Stat.o BitBlock.o Block.o SuperBlock.o -o ln
+
+rm: rm.cc Kernel.o IndexNode.o FileDescriptor.o DirectoryEntry.o ProcessContext.o FileSystem.o Stat.o BitBlock.o Block.o SuperBlock.o
+	$(GCC) $(GCCFLAGS) rm.cc Kernel.o IndexNode.o FileDescriptor.o DirectoryEntry.o ProcessContext.o FileSystem.o Stat.o BitBlock.o Block.o SuperBlock.o -o rm
 
 ls: ls.cc Stat.o DirectoryEntry.o Kernel.o FileSystem.o FileDescriptor.o ProcessContext.o
 	$(GCC) $(GCCFLAGS) ls.cc Stat.o FileDescriptor.o FileSystem.o BitBlock.o IndexNode.o DirectoryEntry.o Block.o SuperBlock.o ProcessContext.o Kernel.o -o ls
@@ -63,5 +66,5 @@ SuperBlock.o: SuperBlock.cc
 	$(GCC) $(GCCFLAGS) -c SuperBlock.cc
 
 clean:
-	rm *.o mkfs ls cat tee ln cp dump mkdir
+	rm *.o mkfs ls cat tee ln rm cp dump mkdir
 
