@@ -642,18 +642,24 @@ int Kernel::unlink( char * pathname)
         exit(EXIT_FAILURE);
     }
 
-    /*
-    short nlink = inode.getNlink();
-    inode.setNlink(nlink - 1);
+    //short nlink = inode.getNlink();
+    //inode.setNlink(nlink - 1);
 
-    if(nlink <= 1)
+    //if(nlink <= 1)
     {
-        //TODO Delete the file
 
+        //TODO Delete the file
     }
 
-    */
+    cout << inode.toString() << endl;
+
     fileDescriptor = new FileDescriptor(fileSystem, inode, flags);
+
+    cout << endl << "indexNode: " << fileDescriptor->getIndexNodeNumber()
+         << endl << "size: " << fileDescriptor->getSize()
+         << endl << "Bytes: " << fileDescriptor->getBytes()
+         << endl << "Block Size: " << fileDescriptor->getBlockSize()
+         << endl << "offset: " << fileDescriptor->getOffset();
 
     int dir = open(dirname, O_RDWR);
     if (dir < 0)
