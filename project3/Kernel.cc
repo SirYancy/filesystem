@@ -654,12 +654,13 @@ int Kernel::unlink( char * pathname)
     cout << inode.toString() << endl;
 
     fileDescriptor = new FileDescriptor(fileSystem, inode, flags);
+    fileDescriptor->setIndexNodeNumber(indexNodeNumber);
 
     cout << endl << "indexNode: " << fileDescriptor->getIndexNodeNumber()
          << endl << "size: " << fileDescriptor->getSize()
          << endl << "Bytes: " << fileDescriptor->getBytes()
          << endl << "Block Size: " << fileDescriptor->getBlockSize()
-         << endl << "offset: " << fileDescriptor->getOffset();
+         << endl << "offset: " << fileDescriptor->getOffset() << endl;
 
     int dir = open(dirname, O_RDWR);
     if (dir < 0)
