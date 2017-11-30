@@ -642,13 +642,49 @@ int Kernel::unlink( char * pathname)
         exit(EXIT_FAILURE);
     }
 
-    //short nlink = inode.getNlink();
-    //inode.setNlink(nlink - 1);
+    int dir = open(dirname, O_RDWR);
 
-    //if(nlink <= 1)
+    int status = 0;
+    DirectoryEntry empty;
+
+    cout << "empty: " << empty.toString() << endl;
+    DirectoryEntry directoryEntry;
+    while(true)
     {
+        status = readdir(dir,directoryEntry);
+        if(status < 0)
+        {
+            cout << PROGRAM_NAME << ": error reading directory in link" << endl;
+            exit(EXIT_FAILURE);
+        }
+        else
+        {
+            if(strcmp(directoryEntry.getName(), name) == 0)
+            {
+                int seek_status = lseek(dir, -DirectoryEntry::DIRECTORY_ENTRY_SIZE, 1);
+                if(seek_status < 0)
+                {
+                    //TODO handle error
+                    exit(EXIT_FAILURE);
+                }
+                writedir(dir, empty);
+                break;
+            }
+        }
+    }
 
-        //TODO Delete the file
+    short nlink = inode.getNlink();
+    inode.setNlink(nlink - 1);
+    fileSystem->writeIndexNode(&inode, indexNodeNumber);
+
+    if(nlink <= 1)
+    {
+        for(int i = 0; i < 10; i++)
+        {
+            int block = inode.getBlockAddress(i);
+            cout << "i: " << i << " block: " << block << endl;
+            fileSystem->freeBlock(block);
+        }
     }
 
     cout << inode.toString() << endl;
@@ -662,15 +698,7 @@ int Kernel::unlink( char * pathname)
          << endl << "Block Size: " << fileDescriptor->getBlockSize()
          << endl << "offset: " << fileDescriptor->getOffset() << endl;
 
-    int dir = open(dirname, O_RDWR);
-    if (dir < 0)
-    {
-        perror(PROGRAM_NAME);
-        cout << PROGRAM_NAME << ": Unable to open directory" << endl;
-        return -1;
-    }
-
-    int status = 0;
+    status = 0;
 
 }
 
