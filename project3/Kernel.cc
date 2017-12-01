@@ -279,7 +279,6 @@ int Kernel::creat( char * pathname , short mode )
 		int status = 0;
 		DirectoryEntry newDirectoryEntry(newInode , name);
 		DirectoryEntry currentDirectoryEntry;
-
 		while(true)
 		{
 			// read an entry from the directory
@@ -310,7 +309,6 @@ int Kernel::creat( char * pathname , short mode )
 						cout << PROGRAM_NAME << ": error during seek in creat";
 						exit( EXIT_FAILURE );
 					}
-
 					writedir(dir, newDirectoryEntry);
 					break ;
 				}
@@ -345,6 +343,16 @@ int Kernel::creat( char * pathname , short mode )
 
 //			cout << "Next : " << nextDirectoryEntry.toString() << endl;
 		}
+
+        /*           DEBUGGING               */
+        Stat dirstat;
+        stat(dirname, dirstat);
+        cout << endl;
+        cout << "Stat Size: " << dirstat.getSize() << endl;
+
+        /*           DEBUGGING END           */
+
+
 
 		// close the directory
 		close(dir) ;
@@ -638,23 +646,22 @@ int Kernel::unlink( char * pathname)
 
     if(indexNodeNumber < 0)
     {
-        cout << PROGRAM_NAME << ": Unable to unlik. File doesn't exist" << endl;
+        cout << PROGRAM_NAME << ": Unable to unlink. File doesn't exist" << endl;
         exit(EXIT_FAILURE);
     }
-
-    int dir = open(dirname, O_RDWR);
 
     int status = 0;
     DirectoryEntry empty;
 
     cout << "empty: " << empty.toString() << endl;
     DirectoryEntry directoryEntry;
+    int dir = open(dirname, O_RDWR);
     while(true)
     {
         status = readdir(dir,directoryEntry);
         if(status < 0)
         {
-            cout << PROGRAM_NAME << ": error reading directory in link" << endl;
+            cout << PROGRAM_NAME << ": error reading directory in unlink" << endl;
             exit(EXIT_FAILURE);
         }
         else
@@ -686,6 +693,14 @@ int Kernel::unlink( char * pathname)
             fileSystem->freeBlock(block);
         }
     }
+
+    // Reduce size of directory
+
+    IndexNode dirIndexNode;
+    short dirNodeNumber = findIndexNode(dirname, dirIndexNode);
+
+    dirIndexNode.setSize(dirIndexNode.getSize()-16);
+    fileSystem->writeIndexNode(&dirIndexNode, dirNodeNumber);
 
     cout << inode.toString() << endl;
 
