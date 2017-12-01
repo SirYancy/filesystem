@@ -651,34 +651,55 @@ int Kernel::unlink( char * pathname)
     }
 
     int status = 0;
-    DirectoryEntry empty;
 
-    cout << "empty: " << empty.toString() << endl;
-    DirectoryEntry directoryEntry;
+    DirectoryEntry targetDirectoryEntry(indexNodeNumber, name);
+    DirectoryEntry currDirectoryEntry;
     int dir = open(dirname, O_RDWR);
-    while(true)
+    if(dir<0)
     {
-        status = readdir(dir,directoryEntry);
+        perror(PROGRAM_NAME);
+        cout << PROGRAM_NAME << ": Unable to open directory for deleting" << endl;
+        return -1;
+    }
+
+    while(true) {
+        status = readdir(dir,currDirectoryEntry);
         if(status < 0)
         {
-            cout << PROGRAM_NAME << ": error reading directory in unlink" << endl;
-            exit(EXIT_FAILURE);
+            cout << PROGRAM_NAME << ": error reading directory in unlink"<< endl;
+            exit( EXIT_FAILURE ) ;
+        }
+        else if (status == 0)
+        {
+            cout << "No Entry read." << endl;
+            break;
         }
         else
         {
-            if(strcmp(directoryEntry.getName(), name) == 0)
+            cout << currDirectoryEntry.getName() << endl;
+            if(strcmp(currDirectoryEntry.getName(), targetDirectoryEntry.getName()) == 0)
             {
-                int seek_status = lseek(dir, -DirectoryEntry::DIRECTORY_ENTRY_SIZE, 1);
-                if(seek_status < 0)
+                while(true)
                 {
-                    //TODO handle error
-                    exit(EXIT_FAILURE);
+                    shiftdir(dir, currDirectoryEntry);
+                    status = readdir(dir, currDirectoryEntry);
+                    if(status < 0)
+                    {
+                        cout << PROGRAM_NAME << ": Error during shifting in unlink" << endl;
+                        exit(EXIT_FAILURE);
+                    }
+                    else if(status == 0)
+                    {
+                        cout << "Nothing else to shift" << endl;
+                        break;
+                    }
+
                 }
-                writedir(dir, empty);
                 break;
             }
         }
     }
+    
 
     short nlink = inode.getNlink();
     inode.setNlink(nlink - 1);
@@ -699,7 +720,7 @@ int Kernel::unlink( char * pathname)
     IndexNode dirIndexNode;
     short dirNodeNumber = findIndexNode(dirname, dirIndexNode);
 
-    dirIndexNode.setSize(dirIndexNode.getSize()-16);
+    dirIndexNode.setSize(dirIndexNode.getSize() - DirectoryEntry::DIRECTORY_ENTRY_SIZE);
     fileSystem->writeIndexNode(&dirIndexNode, dirNodeNumber);
 
     cout << inode.toString() << endl;
@@ -713,7 +734,7 @@ int Kernel::unlink( char * pathname)
          << endl << "Block Size: " << fileDescriptor->getBlockSize()
          << endl << "offset: " << fileDescriptor->getOffset() << endl;
 
-    status = 0;
+    return 0;
 
 }
 
@@ -1278,6 +1299,55 @@ int Kernel::writedir( int fd , DirectoryEntry& dirp )
 	if(file->getOffset() > file->getSize())
 	{
 		file->setSize(file->getOffset());
+	}
+
+	// return the size of a DirectoryEntry
+	return DirectoryEntry::DIRECTORY_ENTRY_SIZE ;
+}
+
+/*
+ * Shifts directory back one offset
+ */
+int Kernel::shiftdir( int fd , DirectoryEntry& dirp ) 
+{
+	// check fd
+	int status = check_fd_for_write( fd ) ;
+	if( status < 0 )
+		return status ;
+
+	FileDescriptor * file = process.openFiles[fd] ;
+
+	// check to see if the file is a directory
+	if( ( file->getMode() & S_IFMT ) != S_IFDIR )
+	{
+		// return (ENOTDIR) if a needed directory is not a directory
+		process.errno = ENOTDIR ;
+		return -1 ;
+	}
+
+	short blockSize = file->getBlockSize() ;
+	// allocate or read a block
+	status = file->readBlock( (short)( file->getOffset() / blockSize ) ) ;
+	if( status < 0 )
+	{
+		return status ;
+	}
+
+    int size = DirectoryEntry::DIRECTORY_ENTRY_SIZE;
+    int offset = (file->getOffset() % blockSize) - size;
+    int blockOffset = (file->getOffset() / blockSize);
+
+    cout << "Block Size: " << blockSize << " File Offset: " << file->getOffset() << " offset: " << offset << " blockOffset: " << blockOffset << " directory entry size: " << size << endl;
+
+
+	// write bytes from the DirectoryEntry into the block
+	dirp.write( file->getBytes() ,  offset) ;
+
+	// write the updated block
+	status = file->writeBlock( (short)(blockOffset) ) ;
+	if( status < 0 )
+	{
+		return status ;
 	}
 
 	// return the size of a DirectoryEntry
