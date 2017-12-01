@@ -17,7 +17,11 @@ IndexNode::IndexNode()
 		directBlocks[i] = NOT_A_BLOCK;
 	}
 
-	indirectBlock = NOT_A_BLOCK;//Not yet implemented.
+	indirectBlock = new int[MAX_DIRECT_BLOCKS];//Not yet implemented.
+	for(int i=0;i < MAX_DIRECT_BLOCKS;i++)
+	{
+		indirectBlock[i] = NOT_A_BLOCK;
+	}
 	doubleIndirectBlock = NOT_A_BLOCK;//Not yet implemented.
 	tripleIndirectBlock = NOT_A_BLOCK;//Not yet implemented.
 	atime = 0 ;//Not yet implemented.
@@ -113,6 +117,11 @@ int IndexNode::getBlockAddress(int block)
 	{
 		return(directBlocks[block]);
 	}
+	//include indirect block
+	else if(block >= MAX_DIRECT_BLOCKS && block < MAX_FILE_BLOCKS){
+		// cout << "got address of indirectBlock" << endl;
+		return(indirectBlock[block - MAX_DIRECT_BLOCKS]);
+	}
 	else
 	{
 		cout << "invalid block address " << block <<endl;
@@ -132,6 +141,10 @@ void IndexNode::setBlockAddress(int block , int address)
 	if(block >= 0 && block < MAX_DIRECT_BLOCKS)
 	{
 		directBlocks[block] = address ;
+	}
+	else if(block >= MAX_DIRECT_BLOCKS && block < MAX_FILE_BLOCKS){
+		// cout << "got address of indirectBlock" << endl;
+		indirectBlock[block - MAX_DIRECT_BLOCKS] = address;
 	}
 	else
 	{
@@ -210,8 +223,15 @@ void IndexNode::write(char * buffer, int offset)
 		buffer[offset+12+3*i+1] = (unsigned char)(directBlocks[i] >> 8);
 		buffer[offset+12+3*i+2] = (unsigned char)(directBlocks[i]);
 	}
+	// write the data block pointed to by indirect block 3 bytes at a time
+	for( int i = 0 ; i < (MAX_FILE_BLOCKS - MAX_DIRECT_BLOCKS); ++i )
+	{
+		buffer[offset+16+3*MAX_DIRECT_BLOCKS+3*i]   = (unsigned char)(indirectBlock[i] >> 16);
+		buffer[offset+16+3*MAX_DIRECT_BLOCKS+3*i+1] = (unsigned char)(indirectBlock[i] >> 8);
+		buffer[offset+16+3*MAX_DIRECT_BLOCKS+3*i+2] = (unsigned char)(indirectBlock[i]);
+	}
 
-	// leave room for indirectBlock, doubleIndirectBlock, tripleIndirectBlock
+	// leave room for  doubleIndirectBlock, tripleIndirectBlock
 
 	// leave room for atime, mtime, ctime
 }
@@ -268,6 +288,15 @@ void IndexNode::read(char * buffer , int offset)
 		directBlocks[i] = b2 << 16 | b1 << 8 | b0 ; 
 	}
 
+		// read the block address info 3 bytes at a time
+	for( int i = 0 ; i < (MAX_FILE_BLOCKS - MAX_DIRECT_BLOCKS); ++i)
+	{
+		b2 = buffer[offset+16+3*MAX_DIRECT_BLOCKS+3*i] & 0xff ;
+		b1 = buffer[offset+16+3*MAX_DIRECT_BLOCKS+3*i+1] & 0xff ;
+		b0 = buffer[offset+16+3*MAX_DIRECT_BLOCKS+3*i+2] & 0xff ;
+		indirectBlock[i] = b2 << 16 | b1 << 8 | b0 ; 
+	}
+
 	// leave room for indirectBlock, doubleIndirectBlock, tripleIndirectBlock
 
 	// leave room for atime, mtime, ctime
@@ -294,6 +323,17 @@ char * IndexNode::toString()
 		}
 
 		sprintf(temp, "%d", directBlocks[i]);
+		strcat(buffer, temp);
+	}
+
+	for( int i = 0 ; i < (MAX_FILE_BLOCKS - MAX_DIRECT_BLOCKS) ; i ++ )
+	{
+		if( i > 0 )
+		{
+			strcat(buffer, ",");
+		}
+
+		sprintf(temp, "%d", indirectBlock[i]);
 		strcat(buffer, temp);
 	}
 
