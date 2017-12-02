@@ -4,116 +4,28 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-BITBLOCK_H	BitBlock.h	2;"	d
-BLOCK_H	Block.h	2;"	d
 BUF_SIZE	cat.cc	11;"	d	file:
 BUF_SIZE	cp.cc	11;"	d	file:
 BUF_SIZE	tee.cc	11;"	d	file:
 BitBlock	BitBlock.cc	/^BitBlock::BitBlock(short blockSize)$/;"	f	class:BitBlock
-BitBlock	BitBlock.h	/^class BitBlock : public Block$/;"	c
 Block	Block.cc	/^Block::Block( short blockSize )$/;"	f	class:Block
 Block	Block.cc	/^Block::Block()$/;"	f	class:Block
-Block	Block.h	/^class Block $/;"	c
-DIRECTORY_ENTRY_H	DirectoryEntry.h	2;"	d
-DIRECTORY_ENTRY_SIZE	DirectoryEntry.h	/^		const static int DIRECTORY_ENTRY_SIZE = MAX_FILENAME_LENGTH + 2 ;$/;"	m	class:DirectoryEntry
 DirectoryEntry	DirectoryEntry.cc	/^DirectoryEntry::DirectoryEntry()$/;"	f	class:DirectoryEntry
 DirectoryEntry	DirectoryEntry.cc	/^DirectoryEntry::DirectoryEntry(short ino, char * name) $/;"	f	class:DirectoryEntry
-DirectoryEntry	DirectoryEntry.h	/^class DirectoryEntry $/;"	c
-EACCES	Kernel.h	/^		const static int EACCES = 13 ;$/;"	m	class:Kernel
-EBADF	Kernel.h	/^		const static int EBADF = 9 ;$/;"	m	class:Kernel
-EEXIST	Kernel.h	/^		const static int EEXIST = 17 ;$/;"	m	class:Kernel
-EFBIG	Kernel.h	/^		const static int EFBIG = 27 ;$/;"	m	class:Kernel
-EINVAL	Kernel.h	/^		const static int EINVAL = 22 ;$/;"	m	class:Kernel
-EISDIR	Kernel.h	/^		const static int EISDIR = 21 ;$/;"	m	class:Kernel
-EMFILE	Kernel.h	/^		const static int EMFILE = 24 ;$/;"	m	class:Kernel
-EMLINK	Kernel.h	/^		const static int EMLINK = 31 ;$/;"	m	class:Kernel
-ENFILE	Kernel.h	/^		const static int ENFILE = 23 ;$/;"	m	class:Kernel
-ENOENT	Kernel.h	/^		const static int ENOENT = 2 ;$/;"	m	class:Kernel
-ENOSPC	Kernel.h	/^		const static int ENOSPC = 28 ;$/;"	m	class:Kernel
-ENOTDIR	Kernel.h	/^		const static int ENOTDIR = 20 ;$/;"	m	class:Kernel
-EPERM	Kernel.h	/^		const static int EPERM = 1 ;$/;"	m	class:Kernel
-EROFS	Kernel.h	/^		const static int EROFS = 30 ;$/;"	m	class:Kernel
-EXDEV	Kernel.h	/^		const static int EXDEV = 18 ;$/;"	m	class:Kernel
-EXIT_FAILURE	Kernel.h	/^		const static int EXIT_FAILURE = 1 ; $/;"	m	class:Kernel
-EXIT_SUCCESS	Kernel.h	/^		const static int EXIT_SUCCESS = 0 ;$/;"	m	class:Kernel
-FILESYSTEM_H	FileSystem.h	2;"	d
-FILE_DESCRIPTOR_H	FileDescriptor.h	2;"	d
 FileDescriptor	FileDescriptor.cc	/^FileDescriptor::FileDescriptor(FileSystem * newFileSystem, IndexNode &newIndexNode, int newFlags)$/;"	f	class:FileDescriptor
-FileDescriptor	FileDescriptor.h	/^class FileDescriptor$/;"	c
 FileSystem	FileSystem.cc	/^FileSystem::FileSystem(char * newFilename, char * newMode)$/;"	f	class:FileSystem
-FileSystem	FileSystem.h	/^class FileSystem$/;"	c
-GCC	Makefile	/^GCC = g++-5$/;"	m
-GCCFLAGS	Makefile	/^GCCFLAGS = $/;"	m
-INDEXNODE_H	IndexNode.h	2;"	d
-INDEX_NODE_SIZE	IndexNode.h	/^		const static int INDEX_NODE_SIZE = 64 ;$/;"	m	class:IndexNode
 IndexNode	IndexNode.cc	/^IndexNode::IndexNode()$/;"	f	class:IndexNode
-IndexNode	IndexNode.h	/^class IndexNode$/;"	c
-KERNEL_H	Kernel.h	2;"	d
-Kernel	Kernel.h	/^class Kernel$/;"	c
-MAX_DIRECT_BLOCKS	IndexNode.h	/^		const static int MAX_DIRECT_BLOCKS = 10 ;$/;"	m	class:IndexNode
-MAX_FILENAME_LENGTH	DirectoryEntry.h	/^  		const static int MAX_FILENAME_LENGTH = 14 ;$/;"	m	class:DirectoryEntry
-MAX_FILE_BLOCKS	IndexNode.h	/^		const static int MAX_FILE_BLOCKS = MAX_DIRECT_BLOCKS ;$/;"	m	class:IndexNode
 MAX_OPEN_FILES	Kernel.cc	/^int Kernel::MAX_OPEN_FILES;$/;"	m	class:Kernel	file:
-MAX_OPEN_FILES	Kernel.h	/^		static int MAX_OPEN_FILES;$/;"	m	class:Kernel
-MAX_OPEN_FILES	ProcessContext.h	/^		int MAX_OPEN_FILES;$/;"	m	class:ProcessContext
-MAX_OPEN_FILE_SYSTEMS	Kernel.h	/^		const static int MAX_OPEN_FILE_SYSTEMS = 1 ;$/;"	m	class:Kernel
-NOT_A_BLOCK	FileSystem.h	/^		const static int NOT_A_BLOCK = 0x00FFFFFF;$/;"	m	class:FileSystem
 NOT_A_BLOCK	IndexNode.cc	5;"	d	file:
-OBJECTS	Makefile	/^OBJECTS = Kernel.o ProcessContext.o FileDescriptor.o FileSystem.o Stat.o DirectoryEntry.o BitBlock.o IndexNode.o Block.o SuperBlock.o$/;"	m
 OUTPUT_MODE	cp.cc	12;"	d	file:
 OUTPUT_MODE	tee.cc	12;"	d	file:
-O_RDONLY	Kernel.h	/^		const static int O_RDONLY = 0 ;$/;"	m	class:Kernel
-O_RDWR	Kernel.h	/^		const static int O_RDWR = 2 ;$/;"	m	class:Kernel
-O_WRONLY	Kernel.h	/^		const static int O_WRONLY = 1 ;$/;"	m	class:Kernel
-PROCESS_CONTEXT_H	ProcessContext.h	2;"	d
 PROGRAM_NAME	Kernel.cc	/^char Kernel::PROGRAM_NAME[512];$/;"	m	class:Kernel	file:
-PROGRAM_NAME	Kernel.h	/^		static char PROGRAM_NAME[512];\/\/ = "Kernel" ;$/;"	m	class:Kernel
 ProcessContext	ProcessContext.cc	/^ProcessContext::ProcessContext( short newUid , short newGid , char * newDir, short newUmask )$/;"	f	class:ProcessContext
 ProcessContext	ProcessContext.cc	/^ProcessContext::ProcessContext()$/;"	f	class:ProcessContext
-ProcessContext	ProcessContext.h	/^class ProcessContext$/;"	c
-ROOT_FILE_SYSTEM	Kernel.h	/^		const static short ROOT_FILE_SYSTEM = 0 ;$/;"	m	class:Kernel
-ROOT_INDEX_NODE_NUMBER	FileSystem.h	/^		const static short ROOT_INDEX_NODE_NUMBER = 0;$/;"	m	class:FileSystem
-STAT_H	Stat.h	2;"	d
-SUPER_BLOCK_H	SuperBlock.h	2;"	d
-S_IEXEC	Kernel.h	/^		const static short S_IEXEC = 0100 ;$/;"	m	class:Kernel
-S_IFBLK	Kernel.h	/^		const static short S_IFBLK = 060000 ;$/;"	m	class:Kernel
-S_IFCHR	Kernel.h	/^		const static short S_IFCHR = 020000 ;$/;"	m	class:Kernel
-S_IFDIR	Kernel.h	/^		const static short S_IFDIR = 040000 ;$/;"	m	class:Kernel
-S_IFMPB	Kernel.h	/^		const static short S_IFMPB = 070000 ;$/;"	m	class:Kernel
-S_IFMPC	Kernel.h	/^		const static short S_IFMPC = 030000 ;$/;"	m	class:Kernel
-S_IFMT	Kernel.h	/^		const static short S_IFMT = (short)0170000 ;$/;"	m	class:Kernel
-S_IFREG	Kernel.h	/^		const static short S_IFREG = (short)0100000 ;$/;"	m	class:Kernel
-S_IREAD	Kernel.h	/^		const static short S_IREAD = 0400 ;$/;"	m	class:Kernel
-S_IRGRP	Kernel.h	/^		const static short S_IRGRP = 040 ;$/;"	m	class:Kernel
-S_IROTH	Kernel.h	/^		const static short S_IROTH = 04 ;$/;"	m	class:Kernel
-S_IRUSR	Kernel.h	/^		const static short S_IRUSR = 0400 ;$/;"	m	class:Kernel
-S_IRWXG	Kernel.h	/^		const static short S_IRWXG = 070 ;$/;"	m	class:Kernel
-S_IRWXO	Kernel.h	/^		const static short S_IRWXO = 07 ;$/;"	m	class:Kernel
-S_IRWXU	Kernel.h	/^		const static short S_IRWXU = 0700 ;$/;"	m	class:Kernel
-S_ISGID	Kernel.h	/^		const static short S_ISGID = 02000 ;$/;"	m	class:Kernel
-S_ISUID	Kernel.h	/^		const static short S_ISUID = 04000 ;$/;"	m	class:Kernel
-S_ISVTX	Kernel.h	/^		const static short S_ISVTX = 01000 ;$/;"	m	class:Kernel
-S_IWGRP	Kernel.h	/^		const static short S_IWGRP = 020 ;$/;"	m	class:Kernel
-S_IWOTH	Kernel.h	/^		const static short S_IWOTH = 02 ;$/;"	m	class:Kernel
-S_IWRITE	Kernel.h	/^		const static short S_IWRITE = 0200 ;$/;"	m	class:Kernel
-S_IWUSR	Kernel.h	/^		const static short S_IWUSR = 0200 ;$/;"	m	class:Kernel
-S_IXGRP	Kernel.h	/^		const static short S_IXGRP = 010 ;$/;"	m	class:Kernel
-S_IXOTH	Kernel.h	/^		const static short S_IXOTH = 01 ;$/;"	m	class:Kernel
-S_IXUSR	Kernel.h	/^		const static short S_IXUSR = 0100 ;$/;"	m	class:Kernel
 Stat	Stat.cc	/^Stat::Stat()$/;"	f	class:Stat
-Stat	Stat.h	/^class Stat$/;"	c
 SuperBlock	SuperBlock.cc	/^SuperBlock::SuperBlock()$/;"	f	class:SuperBlock
-SuperBlock	SuperBlock.h	/^class SuperBlock $/;"	c
 allocateBlock	FileSystem.cc	/^int FileSystem::allocateBlock()$/;"	f	class:FileSystem
 allocateIndexNode	FileSystem.cc	/^short FileSystem::allocateIndexNode() $/;"	f	class:FileSystem
-atime	IndexNode.h	/^		int atime;\/\/Not yet implemented.$/;"	m	class:IndexNode
-blockCount	FileSystem.h	/^		int blockCount;$/;"	m	class:FileSystem
-blockSize	Block.h	/^		short blockSize;$/;"	m	class:Block
-blockSize	FileSystem.h	/^		short blockSize;$/;"	m	class:FileSystem
-blockSize	SuperBlock.h	/^		unsigned short blockSize;$/;"	m	class:SuperBlock
-blocks	SuperBlock.h	/^		int blocks;$/;"	m	class:SuperBlock
-bytes	Block.h	/^		char * bytes;$/;"	m	class:Block
-bytes	FileDescriptor.h	/^		char * bytes;$/;"	m	class:FileDescriptor
 check_fd	Kernel.cc	/^int Kernel::check_fd( int fd )$/;"	f	class:Kernel
 check_fd_for_read	Kernel.cc	/^int Kernel::check_fd_for_read( int fd )$/;"	f	class:Kernel
 check_fd_for_write	Kernel.cc	/^int Kernel::check_fd_for_write( int fd )$/;"	f	class:Kernel
@@ -123,32 +35,11 @@ copy	DirectoryEntry.cc	/^void DirectoryEntry::copy(DirectoryEntry & de)$/;"	f	cl
 copy	IndexNode.cc	/^void IndexNode::copy( IndexNode& indexNode )$/;"	f	class:IndexNode
 copyIndexNode	Stat.cc	/^void Stat::copyIndexNode(IndexNode& indexNode )$/;"	f	class:Stat
 creat	Kernel.cc	/^int Kernel::creat( char * pathname , short mode )$/;"	f	class:Kernel
-ctime	IndexNode.h	/^		int ctime ;\/\/Not yet implemented.$/;"	m	class:IndexNode
-currentFreeListBitNumber	FileSystem.h	/^		int currentFreeListBitNumber;$/;"	m	class:FileSystem
-currentFreeListBlock	FileSystem.h	/^		int currentFreeListBlock;  $/;"	m	class:FileSystem
-currentIndexNodeBlock	FileSystem.h	/^		short currentIndexNodeBlock;$/;"	m	class:FileSystem
-currentIndexNodeNumber	FileSystem.h	/^		short currentIndexNodeNumber;$/;"	m	class:FileSystem
-d_ino	DirectoryEntry.h	/^  		unsigned short d_ino;$/;"	m	class:DirectoryEntry
-d_name	DirectoryEntry.h	/^		char d_name[1024];$/;"	m	class:DirectoryEntry
-dataBlockOffset	FileSystem.h	/^		int dataBlockOffset;$/;"	m	class:FileSystem
-dataBlockOffset	SuperBlock.h	/^		int dataBlockOffset;$/;"	m	class:SuperBlock
-deviceNumber	FileDescriptor.h	/^		short deviceNumber;$/;"	m	class:FileDescriptor
-dir	ProcessContext.h	/^		char dir[512];$/;"	m	class:ProcessContext
-directBlocks	IndexNode.h	/^		int directBlocks[10];$/;"	m	class:IndexNode
-doubleIndirectBlock	IndexNode.h	/^		int doubleIndirectBlock;\/\/Not yet implemented.$/;"	m	class:IndexNode
-errno	ProcessContext.h	/^  		int errno;$/;"	m	class:ProcessContext
 exit	Kernel.cc	/^void Kernel::exit( int status )$/;"	f	class:Kernel
-file	FileSystem.h	/^		fstream file;$/;"	m	class:FileSystem
-fileSystem	FileDescriptor.h	/^		FileSystem * fileSystem;$/;"	m	class:FileDescriptor
-filename	FileSystem.h	/^		char filename[256];$/;"	m	class:FileSystem
 finalize	Kernel.cc	/^void Kernel::finalize( int status )$/;"	f	class:Kernel
 findIndexNode	Kernel.cc	/^short Kernel::findIndexNode( char * path , IndexNode& inode )$/;"	f	class:Kernel
 findNextIndexNode	Kernel.cc	/^short Kernel::findNextIndexNode(FileSystem * fileSystem, IndexNode& indexNode , char * name, IndexNode& nextIndexNode)$/;"	f	class:Kernel
-flags	FileDescriptor.h	/^		int flags;$/;"	m	class:FileDescriptor
 freeBlock	FileSystem.cc	/^void FileSystem::freeBlock(int dataBlockNumber)$/;"	f	class:FileSystem
-freeListBitBlock	FileSystem.h	/^		BitBlock * freeListBitBlock;$/;"	m	class:FileSystem
-freeListBlockOffset	FileSystem.h	/^		int freeListBlockOffset;$/;"	m	class:FileSystem
-freeListBlockOffset	SuperBlock.h	/^		int freeListBlockOffset;$/;"	m	class:SuperBlock
 fstat	Kernel.cc	/^int Kernel::fstat( int fd , Stat &buf )$/;"	f	class:Kernel
 g_sys_errlist	Kernel.cc	/^char * g_sys_errlist[32] = {$/;"	v
 getAtime	IndexNode.cc	/^int IndexNode::getAtime()$/;"	f	class:IndexNode
@@ -181,7 +72,6 @@ getIno	DirectoryEntry.cc	/^short DirectoryEntry::getIno()$/;"	f	class:DirectoryE
 getIno	Stat.cc	/^short Stat::getIno()$/;"	f	class:Stat
 getInodeBlockOffset	FileSystem.cc	/^int FileSystem::getInodeBlockOffset()$/;"	f	class:FileSystem
 getInodeBlockOffset	SuperBlock.cc	/^int SuperBlock::getInodeBlockOffset()$/;"	f	class:SuperBlock
-getMaxOpenFiles	ProcessContext.h	/^		int getMaxOpenFiles(){return MAX_OPEN_FILES;}$/;"	f	class:ProcessContext
 getMode	FileDescriptor.cc	/^short FileDescriptor::getMode()$/;"	f	class:FileDescriptor
 getMode	IndexNode.cc	/^short IndexNode::getMode()$/;"	f	class:IndexNode
 getMode	Stat.cc	/^short Stat::getMode()$/;"	f	class:Stat
@@ -202,18 +92,9 @@ getUid	IndexNode.cc	/^short IndexNode::getUid()$/;"	f	class:IndexNode
 getUid	ProcessContext.cc	/^short ProcessContext::getUid()$/;"	f	class:ProcessContext
 getUid	Stat.cc	/^short Stat::getUid()$/;"	f	class:Stat
 getUmask	ProcessContext.cc	/^short ProcessContext::getUmask()$/;"	f	class:ProcessContext
-gid	IndexNode.h	/^		unsigned short gid;$/;"	m	class:IndexNode
-gid	ProcessContext.h	/^		short gid;$/;"	m	class:ProcessContext
-indexBlockBytes	FileSystem.h	/^		char * indexBlockBytes;$/;"	m	class:FileSystem
-indexNode	FileDescriptor.h	/^		IndexNode indexNode;$/;"	m	class:FileDescriptor
-indexNodeNumber	FileDescriptor.h	/^		short indexNodeNumber;$/;"	m	class:FileDescriptor
-indirectBlock	IndexNode.h	/^		int indirectBlock;\/\/Not yet implemented.$/;"	m	class:IndexNode
 init	ProcessContext.cc	/^void ProcessContext::init(short newUid , short newGid , char * newDir, short newUmask)$/;"	f	class:ProcessContext
 initialize	Kernel.cc	/^bool Kernel::initialize()$/;"	f	class:Kernel
-inodeBlockOffset	FileSystem.h	/^		int inodeBlockOffset;$/;"	m	class:FileSystem
-inodeBlockOffset	SuperBlock.h	/^		int inodeBlockOffset;$/;"	m	class:SuperBlock
 isBitSet	BitBlock.cc	/^bool BitBlock::isBitSet(int whichBit)$/;"	f	class:BitBlock
-isSystemReady	FileSystem.h	/^		bool isSystemReady;$/;"	m	class:FileSystem
 is_ready	FileSystem.cc	/^bool FileSystem::is_ready()$/;"	f	class:FileSystem
 link	Kernel.cc	/^int Kernel::link( char * oldPathName, char * newPathName)$/;"	f	class:Kernel
 loadFreeListBlock	FileSystem.cc	/^void FileSystem::loadFreeListBlock(int dataBlockNumber)$/;"	f	class:FileSystem
@@ -226,25 +107,17 @@ main	ln.cc	/^int main(int argc, char ** argv)$/;"	f
 main	ls.cc	/^int main(int argc, char ** argv)$/;"	f
 main	mkdir.cc	/^int main(int argc, char ** argv)$/;"	f
 main	mkfs.cc	/^int main(int argc, char ** argv)$/;"	f
+main	rm.cc	/^int main(int argc, char ** argv)$/;"	f
 main	tee.cc	/^int main(int argc, char ** argv)$/;"	f
-mode	IndexNode.h	/^		unsigned short mode;$/;"	m	class:IndexNode
-mtime	IndexNode.h	/^		int mtime ;\/\/Not yet implemented.$/;"	m	class:IndexNode
-nlink	IndexNode.h	/^		unsigned short nlink;$/;"	m	class:IndexNode
-offset	FileDescriptor.h	/^		int offset;$/;"	m	class:FileDescriptor
 open	FileSystem.cc	/^bool FileSystem::open()$/;"	f	class:FileSystem
 open	Kernel.cc	/^int Kernel::open( char * pathname , int flags )$/;"	f	class:Kernel
 open	Kernel.cc	/^int Kernel::open(FileDescriptor * fileDescriptor )$/;"	f	class:Kernel
 openFileSystems	Kernel.cc	/^FileSystem * Kernel::openFileSystems;$/;"	m	class:Kernel	file:
-openFileSystems	Kernel.h	/^		static FileSystem * openFileSystems; \/\/new FileSystem[MAX_OPEN_FILE_SYSTEMS] ;$/;"	m	class:Kernel
 openFiles	Kernel.cc	/^FileDescriptor ** Kernel::openFiles;$/;"	m	class:Kernel	file:
-openFiles	Kernel.h	/^		static FileDescriptor ** openFiles;$/;"	m	class:Kernel
-openFiles	ProcessContext.h	/^		FileDescriptor ** openFiles; \/\/= new FileDescriptor[MAX_OPEN_FILES];$/;"	m	class:ProcessContext
 perror	Kernel.cc	/^void Kernel::perror(const char * s )$/;"	f	class:Kernel
 print	ls.cc	/^void print(char * name , Stat &stat )$/;"	f
 process	Kernel.cc	/^ProcessContext Kernel::process;$/;"	m	class:Kernel	file:
-process	Kernel.h	/^		static ProcessContext process;$/;"	m	class:Kernel
 processCount	Kernel.cc	/^int Kernel::processCount;$/;"	m	class:Kernel	file:
-processCount	Kernel.h	/^		static int processCount;$/;"	m	class:Kernel
 read	Block.cc	/^void Block::read(fstream& file)$/;"	f	class:Block
 read	DirectoryEntry.cc	/^void DirectoryEntry::read( char * buffer , int offset )$/;"	f	class:DirectoryEntry
 read	FileSystem.cc	/^void FileSystem::read(char * bytes, int blockNumber)$/;"	f	class:FileSystem
@@ -255,7 +128,6 @@ readBlock	FileDescriptor.cc	/^int FileDescriptor::readBlock(short relativeBlockN
 readIndexNode	FileSystem.cc	/^void FileSystem::readIndexNode(IndexNode * indexNode, short indexNodeNumber) $/;"	f	class:FileSystem
 readdir	Kernel.cc	/^int Kernel::readdir(int fd, DirectoryEntry& dirp)$/;"	f	class:Kernel
 resetBit	BitBlock.cc	/^void BitBlock:: resetBit(int whichBit)$/;"	f	class:BitBlock
-rootIndexNode	FileSystem.h	/^		IndexNode rootIndexNode;$/;"	m	class:FileSystem
 setAtime	IndexNode.cc	/^void IndexNode::setAtime(int newAtime)$/;"	f	class:IndexNode
 setAtime	Stat.cc	/^void Stat::setAtime( int newAtime )$/;"	f	class:Stat
 setBit	BitBlock.cc	/^void BitBlock::setBit( int whichBit )$/;"	f	class:BitBlock
@@ -297,27 +169,12 @@ setUid	IndexNode.cc	/^void IndexNode::setUid( short newUid )$/;"	f	class:IndexNo
 setUid	ProcessContext.cc	/^void ProcessContext::setUid( short newUid )$/;"	f	class:ProcessContext
 setUid	Stat.cc	/^void Stat::setUid( short newUid )$/;"	f	class:Stat
 setUmask	ProcessContext.cc	/^void ProcessContext::setUmask( short newUmask )$/;"	f	class:ProcessContext
-size	IndexNode.h	/^		int size;$/;"	m	class:IndexNode
-st_atime	Stat.h	/^		int st_atime;$/;"	m	class:Stat
-st_ctime	Stat.h	/^		int st_ctime;$/;"	m	class:Stat
-st_dev	Stat.h	/^		short st_dev;$/;"	m	class:Stat
-st_gid	Stat.h	/^		short st_gid;$/;"	m	class:Stat
-st_ino	Stat.h	/^		short st_ino;$/;"	m	class:Stat
-st_mode	Stat.h	/^		short st_mode;$/;"	m	class:Stat
-st_mtime	Stat.h	/^		int st_mtime;$/;"	m	class:Stat
-st_nlink	Stat.h	/^		short st_nlink;$/;"	m	class:Stat
-st_rdev	Stat.h	/^		short st_rdev;$/;"	m	class:Stat
-st_size	Stat.h	/^		int st_size;$/;"	m	class:Stat
-st_uid	Stat.h	/^		short st_uid;$/;"	m	class:Stat
+shiftdir	Kernel.cc	/^int Kernel::shiftdir( int fd , DirectoryEntry& dirp ) $/;"	f	class:Kernel
 stat	Kernel.cc	/^int Kernel::stat(char * name , Stat & buf )$/;"	f	class:Kernel
 sync	Kernel.cc	/^void Kernel::sync()$/;"	f	class:Kernel
-sys_nerr	Kernel.h	/^		const static int sys_nerr = 32 ;$/;"	m	class:Kernel
 toString	DirectoryEntry.cc	/^char * DirectoryEntry::toString()$/;"	f	class:DirectoryEntry
 toString	IndexNode.cc	/^char * IndexNode::toString()$/;"	f	class:IndexNode
-tripleIndirectBlock	IndexNode.h	/^		int tripleIndirectBlock;\/\/Not yet implemented.$/;"	m	class:IndexNode
-uid	IndexNode.h	/^		unsigned short uid;$/;"	m	class:IndexNode
-uid	ProcessContext.h	/^		short uid;$/;"	m	class:ProcessContext
-umask	ProcessContext.h	/^		short umask;$/;"	m	class:ProcessContext
+unlink	Kernel.cc	/^int Kernel::unlink( char * pathname)$/;"	f	class:Kernel
 write	Block.cc	/^void Block::write(fstream& file)$/;"	f	class:Block
 write	DirectoryEntry.cc	/^void DirectoryEntry::write(char * buffer , int offset )$/;"	f	class:DirectoryEntry
 write	FileSystem.cc	/^void FileSystem::write(char * bytes, int blockNumber)$/;"	f	class:FileSystem

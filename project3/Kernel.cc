@@ -641,9 +641,6 @@ int Kernel::unlink( char * pathname)
 		}
 	}
 
-    int flags = O_WRONLY ;
-    FileDescriptor * fileDescriptor = NULL;
-
     if(indexNodeNumber < 0)
     {
         cout << PROGRAM_NAME << ": Unable to unlink. File doesn't exist" << endl;
@@ -671,34 +668,33 @@ int Kernel::unlink( char * pathname)
         }
         else if (status == 0)
         {
-            cout << "No Entry read." << endl;
             break;
         }
         else
         {
-            cout << currDirectoryEntry.getName() << endl;
             if(strcmp(currDirectoryEntry.getName(), targetDirectoryEntry.getName()) == 0)
             {
+                status = readdir(dir,currDirectoryEntry);
+
                 while(true)
                 {
-                    shiftdir(dir, currDirectoryEntry);
-                    status = readdir(dir, currDirectoryEntry);
+                    status = shiftdir(dir,currDirectoryEntry);
                     if(status < 0)
                     {
-                        cout << PROGRAM_NAME << ": Error during shifting in unlink" << endl;
-                        exit(EXIT_FAILURE);
+                        cout << PROGRAM_NAME << ": Error in shfiting";
+                        exit( EXIT_FAILURE);
                     }
-                    else if(status == 0)
+                    status = readdir(dir,currDirectoryEntry);
+                    if (status == 0)
                     {
-                        cout << "Nothing else to shift" << endl;
                         break;
                     }
-
                 }
                 break;
             }
         }
     }
+
     
 
     short nlink = inode.getNlink();
@@ -710,32 +706,33 @@ int Kernel::unlink( char * pathname)
         for(int i = 0; i < 10; i++)
         {
             int block = inode.getBlockAddress(i);
-            cout << "i: " << i << " block: " << block << endl;
             fileSystem->freeBlock(block);
         }
     }
 
+
+
     // Reduce size of directory
 
-    IndexNode dirIndexNode;
-    short dirNodeNumber = findIndexNode(dirname, dirIndexNode);
+    FileDescriptor * dirDescriptor = process.openFiles[dir];
+    
+    short dirNodeNumber = dirDescriptor->getIndexNodeNumber();
+    
+    IndexNode * dirIndexNode = dirDescriptor->getIndexNode();
 
-    dirIndexNode.setSize(dirIndexNode.getSize() - DirectoryEntry::DIRECTORY_ENTRY_SIZE);
-    fileSystem->writeIndexNode(&dirIndexNode, dirNodeNumber);
+    cout << "DirNode: " << dirIndexNode->toString() << endl
+         << "Size: " << dirIndexNode->getSize() << endl;
 
-    cout << inode.toString() << endl;
+    int newSize = dirIndexNode->getSize() - DirectoryEntry::DIRECTORY_ENTRY_SIZE;
 
-    fileDescriptor = new FileDescriptor(fileSystem, inode, flags);
-    fileDescriptor->setIndexNodeNumber(indexNodeNumber);
+    dirIndexNode->setSize(newSize);
+    close(dir);
+    fileSystem->writeIndexNode(dirIndexNode, dirNodeNumber);
 
-    cout << endl << "indexNode: " << fileDescriptor->getIndexNodeNumber()
-         << endl << "size: " << fileDescriptor->getSize()
-         << endl << "Bytes: " << fileDescriptor->getBytes()
-         << endl << "Block Size: " << fileDescriptor->getBlockSize()
-         << endl << "offset: " << fileDescriptor->getOffset() << endl;
+    cout << "DirNode: " << dirIndexNode->toString() << endl
+         << "Size: " << dirIndexNode->getSize() << endl;
 
     return 0;
-
 }
 
 
@@ -1306,7 +1303,7 @@ int Kernel::writedir( int fd , DirectoryEntry& dirp )
 }
 
 /*
- * Shifts directory back one offset
+ * Shifts directory entry back one offset
  */
 int Kernel::shiftdir( int fd , DirectoryEntry& dirp ) 
 {
@@ -1334,7 +1331,7 @@ int Kernel::shiftdir( int fd , DirectoryEntry& dirp )
 	}
 
     int size = DirectoryEntry::DIRECTORY_ENTRY_SIZE;
-    int offset = (file->getOffset() % blockSize) - size;
+    int offset = (file->getOffset() % blockSize) - (2*size);
     int blockOffset = (file->getOffset() / blockSize);
 
     cout << "Block Size: " << blockSize << " File Offset: " << file->getOffset() << " offset: " << offset << " blockOffset: " << blockOffset << " directory entry size: " << size << endl;
@@ -1342,6 +1339,8 @@ int Kernel::shiftdir( int fd , DirectoryEntry& dirp )
 
 	// write bytes from the DirectoryEntry into the block
 	dirp.write( file->getBytes() ,  offset) ;
+
+    cout << "bytes: " << file->getBytes() << endl;
 
 	// write the updated block
 	status = file->writeBlock( (short)(blockOffset) ) ;

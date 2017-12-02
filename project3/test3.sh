@@ -1,4 +1,5 @@
 
+
 #!/bin/bash
 
 echo "deleting filesystem \n"
@@ -27,9 +28,3 @@ echo "Lorem ipsum dolor sit amet" | ./tee /home/test.txt
 
 echo "making link \n"
 ./ln "/home/rights.txt" "/docs/other.txt"
-
-echo "Testing Remove\n"
-./rm "/home/lipsum.txt"
-
-echo "listing directory\n"
-./ls "/home"
