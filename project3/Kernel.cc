@@ -678,6 +678,15 @@ int Kernel::unlink( char * pathname)
 
                 while(true)
                 {
+                    if(status <0)
+                    {
+                        cout << PROGRAM_NAME << ": error shifting directory entries" << endl;
+                        exit(EXIT_FAILURE);
+                    }
+                    else if (status == 0)
+                    {
+                        break;
+                    }
                     status = shiftdir(dir,currDirectoryEntry);
                     if(status < 0)
                     {
@@ -710,8 +719,6 @@ int Kernel::unlink( char * pathname)
         }
     }
 
-
-
     // Reduce size of directory
 
     FileDescriptor * dirDescriptor = process.openFiles[dir];
@@ -720,17 +727,11 @@ int Kernel::unlink( char * pathname)
     
     IndexNode * dirIndexNode = dirDescriptor->getIndexNode();
 
-    cout << "DirNode: " << dirIndexNode->toString() << endl
-         << "Size: " << dirIndexNode->getSize() << endl;
-
     int newSize = dirIndexNode->getSize() - DirectoryEntry::DIRECTORY_ENTRY_SIZE;
 
     dirIndexNode->setSize(newSize);
     close(dir);
     fileSystem->writeIndexNode(dirIndexNode, dirNodeNumber);
-
-    cout << "DirNode: " << dirIndexNode->toString() << endl
-         << "Size: " << dirIndexNode->getSize() << endl;
 
     return 0;
 }
@@ -1331,7 +1332,7 @@ int Kernel::shiftdir( int fd , DirectoryEntry& dirp )
 	}
 
     int size = DirectoryEntry::DIRECTORY_ENTRY_SIZE;
-    int offset = (file->getOffset() % blockSize) - (2*size);
+    int offset = (file->getOffset() % blockSize) - 2*size;
     int blockOffset = (file->getOffset() / blockSize);
 
     cout << "Block Size: " << blockSize << " File Offset: " << file->getOffset() << " offset: " << offset << " blockOffset: " << blockOffset << " directory entry size: " << size << endl;
