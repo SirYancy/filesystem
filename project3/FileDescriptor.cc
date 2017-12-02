@@ -155,3 +155,24 @@ int FileDescriptor::writeBlock(short relativeBlockNumber)
 
 	return 0 ;
 }
+char * FileDescriptor::toString()
+{
+	//Not thread safe. -KS
+	static char buffer[1024];
+	char temp[512];
+	memset(buffer, '\0', 1024);
+	memset(temp, '\0', 512);
+	sprintf(buffer, "FileDescriptor[%d,{ inode number: ", indexNodeNumber);
+	sprintf(temp, ", device number: %d", deviceNumber);
+    strcat(buffer,temp);
+	sprintf(temp, ", offset: %d", offset);
+    strcat(buffer,temp);
+	sprintf(temp, ", flags: %d", flags);
+    strcat(buffer,temp);
+	sprintf(temp, ", bytes: %d", bytes);
+    strcat(buffer,temp);
+
+
+	strcat(buffer, "}]");
+	return buffer;
+}

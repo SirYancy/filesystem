@@ -67,8 +67,8 @@ class Kernel
 		static int lseek( int fd , int offset , int whence );
 
         //link and unlink headers
-        static int link( char * ePathname, char * nPathname);
-        static int unlink( char * pathname);
+        static int link(char * ePathname, char * nPathname);
+        static int unlink(char * pathname);
 
 		const static int O_RDONLY = 0 ;
 		const static int O_WRONLY = 1 ;

@@ -323,6 +323,7 @@ int Kernel::creat( char * pathname , short mode )
 			// read next item
 			status = readdir(dir , nextDirectoryEntry);
 
+
 			if(status>0) 
 			{	
 				// in its place
@@ -343,16 +344,6 @@ int Kernel::creat( char * pathname , short mode )
 
 //			cout << "Next : " << nextDirectoryEntry.toString() << endl;
 		}
-
-        /*           DEBUGGING               */
-        Stat dirstat;
-        stat(dirname, dirstat);
-        cout << endl;
-        cout << "Stat Size: " << dirstat.getSize() << endl;
-
-        /*           DEBUGGING END           */
-
-
 
 		// close the directory
 		close(dir) ;
@@ -401,7 +392,7 @@ int Kernel::creat( char * pathname , short mode )
 	return open(fileDescriptor) ;
 }
 
-int Kernel::link( char * oldPathName, char * newPathName)
+int Kernel::link(char * oldPathName, char * newPathName)
 {
     char * fullPath = getFullPath(oldPathName);
 
@@ -573,7 +564,7 @@ int Kernel::link( char * oldPathName, char * newPathName)
     return open(fileDescriptor);
 }
 
-int Kernel::unlink( char * pathname)
+int Kernel::unlink(char * pathname)
 {
     char * fullPath = getFullPath(pathname);
 
@@ -646,12 +637,13 @@ int Kernel::unlink( char * pathname)
         cout << PROGRAM_NAME << ": Unable to unlink. File doesn't exist" << endl;
         exit(EXIT_FAILURE);
     }
+    int dir = open(dirname, O_RDWR);
 
+    // Shift all directory entries up.
     int status = 0;
 
     DirectoryEntry targetDirectoryEntry(indexNodeNumber, name);
     DirectoryEntry currDirectoryEntry;
-    int dir = open(dirname, O_RDWR);
     if(dir<0)
     {
         perror(PROGRAM_NAME);
@@ -661,6 +653,7 @@ int Kernel::unlink( char * pathname)
 
     while(true) {
         status = readdir(dir,currDirectoryEntry);
+        cout << "1Entry Name: " << currDirectoryEntry.getName() << endl;
         if(status < 0)
         {
             cout << PROGRAM_NAME << ": error reading directory in unlink"<< endl;
@@ -676,35 +669,21 @@ int Kernel::unlink( char * pathname)
             {
                 status = readdir(dir,currDirectoryEntry);
 
-                while(true)
+                while(status>0)
                 {
-                    if(status <0)
+                    if(status > 0)
                     {
-                        cout << PROGRAM_NAME << ": error shifting directory entries" << endl;
-                        exit(EXIT_FAILURE);
+                        int seek_status = lseek(dir, -(2*DirectoryEntry::DIRECTORY_ENTRY_SIZE), 1);
                     }
-                    else if (status == 0)
-                    {
-                        break;
-                    }
-                    status = shiftdir(dir,currDirectoryEntry);
-                    if(status < 0)
-                    {
-                        cout << PROGRAM_NAME << ": Error in shfiting";
-                        exit( EXIT_FAILURE);
-                    }
+                    writedir(dir,currDirectoryEntry);
+                    int seek_status = lseek(dir, DirectoryEntry::DIRECTORY_ENTRY_SIZE, 1);
                     status = readdir(dir,currDirectoryEntry);
-                    if (status == 0)
-                    {
-                        break;
-                    }
                 }
+
                 break;
             }
         }
     }
-
-    
 
     short nlink = inode.getNlink();
     inode.setNlink(nlink - 1);
@@ -718,11 +697,11 @@ int Kernel::unlink( char * pathname)
             fileSystem->freeBlock(block);
         }
     }
-
+    
     // Reduce size of directory
 
     FileDescriptor * dirDescriptor = process.openFiles[dir];
-    
+
     short dirNodeNumber = dirDescriptor->getIndexNodeNumber();
     
     IndexNode * dirIndexNode = dirDescriptor->getIndexNode();
@@ -730,8 +709,10 @@ int Kernel::unlink( char * pathname)
     int newSize = dirIndexNode->getSize() - DirectoryEntry::DIRECTORY_ENTRY_SIZE;
 
     dirIndexNode->setSize(newSize);
-    close(dir);
     fileSystem->writeIndexNode(dirIndexNode, dirNodeNumber);
+
+
+    close(dir);
 
     return 0;
 }
@@ -1308,6 +1289,7 @@ int Kernel::writedir( int fd , DirectoryEntry& dirp )
  */
 int Kernel::shiftdir( int fd , DirectoryEntry& dirp ) 
 {
+    cout << "DEBUG - Shifting Directory" << endl;
 	// check fd
 	int status = check_fd_for_write( fd ) ;
 	if( status < 0 )
@@ -1335,13 +1317,9 @@ int Kernel::shiftdir( int fd , DirectoryEntry& dirp )
     int offset = (file->getOffset() % blockSize) - 2*size;
     int blockOffset = (file->getOffset() / blockSize);
 
-    cout << "Block Size: " << blockSize << " File Offset: " << file->getOffset() << " offset: " << offset << " blockOffset: " << blockOffset << " directory entry size: " << size << endl;
-
 
 	// write bytes from the DirectoryEntry into the block
 	dirp.write( file->getBytes() ,  offset) ;
-
-    cout << "bytes: " << file->getBytes() << endl;
 
 	// write the updated block
 	status = file->writeBlock( (short)(blockOffset) ) ;

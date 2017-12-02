@@ -2,9 +2,6 @@
 
 #!/bin/bash
 
-echo "deleting filesystem \n"
-rm -f filesys.dat
-
 echo "making filesystem \n"
 ./mkfs filesys.dat 256 40
 

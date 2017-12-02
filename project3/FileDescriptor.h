@@ -38,6 +38,7 @@ class FileDescriptor
   		void setOffset( int newOffset );
   		int readBlock( short relativeBlockNumber ) ;
   		int writeBlock( short relativeBlockNumber ) ;
+        char * toString();
 };
 
 #endif
