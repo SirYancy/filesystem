@@ -3,6 +3,7 @@
 #include <string.h>
 #include <cstdlib>
 
+
 /**
  * Prints a system error message.  The actual text written
  * to stderr is the
@@ -13,6 +14,7 @@
  */
 
 //char * Kernel::sys_errlist[32];
+
 char Kernel::PROGRAM_NAME[512];
 ProcessContext Kernel::process;
 FileSystem * Kernel::openFileSystems;
@@ -643,6 +645,7 @@ int Kernel::unlink(char * pathname)
     int status = 0;
 
     DirectoryEntry targetDirectoryEntry(indexNodeNumber, name);
+        cout << "Target Entry: " << targetDirectoryEntry.getName() << endl;
     DirectoryEntry currDirectoryEntry;
     if(dir<0)
     {
@@ -684,7 +687,6 @@ int Kernel::unlink(char * pathname)
             }
         }
     }
-
     short nlink = inode.getNlink();
     inode.setNlink(nlink - 1);
     fileSystem->writeIndexNode(&inode, indexNodeNumber);
@@ -694,13 +696,19 @@ int Kernel::unlink(char * pathname)
         for(int i = 0; i < 10; i++)
         {
             int block = inode.getBlockAddress(i);
-            fileSystem->freeBlock(block);
+            if(block != FileSystem::NOT_A_BLOCK)
+            {
+                fileSystem->freeBlock(block);
+                inode.setBlockAddress(block, FileSystem::NOT_A_BLOCK);
+            }
         }
     }
     
     // Reduce size of directory
 
     FileDescriptor * dirDescriptor = process.openFiles[dir];
+
+    cout << "Descriptor offset: " << dirDescriptor->getOffset() << endl;
 
     short dirNodeNumber = dirDescriptor->getIndexNodeNumber();
     
