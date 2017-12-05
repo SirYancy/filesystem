@@ -1,3 +1,8 @@
+/*
+Project 3 File System Simulator
+Jared Willard and Eric Kuha
+CSCI 5103
+*/
 /**
  * Reads a sequence of files and writes them to standard output.
  * A simple cat program for a simulated file system.

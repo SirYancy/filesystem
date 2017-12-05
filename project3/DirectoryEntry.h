@@ -1,3 +1,8 @@
+/*
+Project 3 File System Simulator
+Jared Willard and Eric Kuha
+CSCI 5103
+*/
 #ifndef DIRECTORY_ENTRY_H
 #define DIRECTORY_ENTRY_H
 #include <iostream>

@@ -1,3 +1,8 @@
+/*
+Project 3 File System Simulator
+Jared Willard and Eric Kuha
+CSCI 5103
+*/
 /**
  * a simple dump program
  * prints the offset, hexvalue, and decimal value for each byte in a

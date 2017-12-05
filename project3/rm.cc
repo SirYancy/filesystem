@@ -1,6 +1,9 @@
 /**
- * Deletes a link to a file or deletes the file
- * if this is the only link
+Project 3 File System Simulator
+Jared Willard and Eric Kuha
+CSCI 5103
+Deletes a link to a file or deletes the file
+if this is the only link
  */
 #include "Kernel.h"
 #include <stdlib.h>

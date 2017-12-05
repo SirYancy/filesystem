@@ -1,6 +1,7 @@
-
-
 #!/bin/bash
+# Project 3 File System Simulator
+# Jared Willard and Eric Kuha
+# CSCI 5103
 
 echo "making filesystem \n"
 ./mkfs filesys.dat 256 40

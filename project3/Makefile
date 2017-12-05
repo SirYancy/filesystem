@@ -1,3 +1,7 @@
+# Project 3 File System Simulator
+# Jared Willard and Eric Kuha
+# CSCI 5103
+# MakeFile
 GCC = g++-5
 GCCFLAGS = 
 OBJECTS = Kernel.o ProcessContext.o FileDescriptor.o FileSystem.o Stat.o DirectoryEntry.o BitBlock.o IndexNode.o Block.o SuperBlock.o
@@ -69,5 +73,5 @@ SuperBlock.o: SuperBlock.cc
 	$(GCC) $(GCCFLAGS) -c SuperBlock.cc
 
 clean:
-	rm *.o mkfs ls cat tee ln rm cp dump mkdir
+	rm *.o mkfs ls cat tee ln rm cp dump mkdir fsck
 

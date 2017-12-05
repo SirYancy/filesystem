@@ -1,3 +1,9 @@
+/*
+Project 3 File System Simulator
+Jared Willard and Eric Kuha
+CSCI 5103
+Block.h
+*/
 #ifndef BLOCK_H
 #define BLOCK_H
 

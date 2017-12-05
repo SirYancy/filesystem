@@ -1,3 +1,8 @@
+/*
+Project 3 File System Simulator
+Jared Willard and Eric Kuha
+CSCI 5103
+*/
 /**
  * A simple copy program for a simulated file system.
  * @author Ray Ontko -> Converted to C++ by Kwangsung

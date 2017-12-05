@@ -1,3 +1,8 @@
+/*
+Project 3 File System Simulator
+Jared Willard and Eric Kuha
+CSCI 5103
+*/
 #include "DirectoryEntry.h"
 #include <stdlib.h>
 #include <string.h>

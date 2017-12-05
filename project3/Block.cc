@@ -1,3 +1,9 @@
+/*
+Project 3 File System Simulator
+Jared Willard and Eric Kuha
+CSCI 5103
+Block.cc
+*/
 #include "Block.h"
 
 Block::Block()

@@ -1,5 +1,7 @@
-
 #!/bin/bash
+# Project 3 File System Simulator
+# Jared Willard and Eric Kuha
+# CSCI 5103
 
 echo "deleting filesystem \n"
 rm -f filesys.dat

@@ -1,6 +1,9 @@
-/**
- * Creates a hard link between a file path
- * and an already existing file
+/*
+Project 3 File System Simulator
+Jared Willard and Eric Kuha
+CSCI 5103
+Creates a hard link between a file path
+and an already existing file
  */
 #include "Kernel.h"
 #include <stdlib.h>

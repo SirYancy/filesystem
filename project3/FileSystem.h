@@ -1,3 +1,8 @@
+/*
+Project 3 File System Simulator
+Jared Willard and Eric Kuha
+CSCI 5103
+*/
 #ifndef FILESYSTEM_H
 #define FILESYSTEM_H
 #include "IndexNode.h"
