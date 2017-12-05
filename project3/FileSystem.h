@@ -42,6 +42,8 @@ class FileSystem
 		int getFreeListBlockOffset();
 		int getInodeBlockOffset();
 		int getDataBlockOffset();
+		// fstream getFile();
+		BitBlock * getFreeListBitBlock();
 		IndexNode * getRootIndexNode();
 
 		bool open();
@@ -51,7 +53,7 @@ class FileSystem
 
 		void freeBlock( int dataBlockNumber );
 		int allocateBlock();
-
+		int getBlockCount();
 		short allocateIndexNode();
 		void readIndexNode(IndexNode * indexNode , short indexNodeNumber);
 		void writeIndexNode(IndexNode * indexNode, short indexNodeNumber);

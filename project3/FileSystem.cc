@@ -43,6 +43,11 @@ FileSystem::~FileSystem()
 
 }
 
+BitBlock * FileSystem::getFreeListBitBlock(){
+	return freeListBitBlock;
+}
+
+
 
 /**
  * Get the blockSize for this FileSystem.
@@ -123,6 +128,9 @@ bool FileSystem::open()
 	return true;
 }
 
+int FileSystem::getBlockCount(){
+	return blockCount;
+}
 /**
  * Close the backing file for this FileSystem, if any.
  * @exception java.io.IOException if the closing the backing
@@ -199,7 +207,7 @@ int FileSystem::allocateBlock()
 	{
 		loadFreeListBlock(currentFreeListBitNumber);
 		bool allocated = freeListBitBlock->isBitSet( 
-				currentFreeListBitNumber % (blockSize * 8));
+			currentFreeListBitNumber % (blockSize * 8));
 		int previousFreeListBitNumber = currentFreeListBitNumber;
 		currentFreeListBitNumber++;
 
@@ -212,7 +220,7 @@ int FileSystem::allocateBlock()
 		if(!allocated) 
 		{
 			freeListBitBlock->setBit( previousFreeListBitNumber % 
-					(blockSize * 8));
+				(blockSize * 8));
 			file.seekp((freeListBlockOffset+currentFreeListBlock)*blockSize);
 			freeListBitBlock->write(file);
 			return previousFreeListBitNumber ;
@@ -244,6 +252,9 @@ void FileSystem::loadFreeListBlock(int dataBlockNumber)
 	}
 }
 
+// fstream FileSystem::getFile(){
+// 	return file;
+// }
 /**
  * Allocate an index node for the file system.
  * @return the inode number for the next available index node; 
@@ -263,7 +274,7 @@ short FileSystem::allocateIndexNode()
 		readIndexNode(&temp, currentIndexNodeNumber);
 		short previousIndexNodeNumber = currentIndexNodeNumber;
 		currentIndexNodeNumber ++;
-	
+		
 		if(currentIndexNodeNumber >= ((dataBlockOffset - inodeBlockOffset) *  (blockSize / IndexNode::INDEX_NODE_SIZE))) 
 		{
 			currentIndexNodeNumber = 0;

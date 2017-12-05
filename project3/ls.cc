@@ -106,7 +106,7 @@ int main(int argc, char ** argv)
 		{
 			// open the directory
 			int fd = Kernel::open( name , Kernel::O_RDONLY ) ;
-
+			cout << "open " << name << endl;
 			if( fd < 0 )
 			{
 				Kernel::perror( PROGRAM_NAME ) ;

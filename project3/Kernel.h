@@ -65,6 +65,8 @@ class Kernel
 		static int creat( char * pathname , short mode );
 		static void exit( int status );
 		static int lseek( int fd , int offset , int whence );
+		static FileDescriptor* getFileDescriptor( char * pathname , int flags );
+
 
         //link and unlink headers
         static int link(char * ePathname, char * nPathname);
@@ -91,7 +93,7 @@ class Kernel
 		static FileSystem * openFileSystems; //new FileSystem[MAX_OPEN_FILE_SYSTEMS] ;
 		static bool initialize();
 		static void finalize( int status );
-
+		static ProcessContext* getProcess();
 	private:
 		static ProcessContext process;
 		static int processCount;

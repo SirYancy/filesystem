@@ -12,6 +12,7 @@ class IndexNode
 		const static int INDEX_NODE_SIZE = 64 ;
 		const static int MAX_DIRECT_BLOCKS = 10 ;
 		const static int MAX_FILE_BLOCKS = MAX_DIRECT_BLOCKS*2 ;
+		const static int NOT_A_BLOCK = 0x00FFFFFF;
 
 	private:
 		unsigned short mode;
@@ -51,5 +52,7 @@ class IndexNode
 		void read(char * buffer, int offset);
 		char * toString();
 		void copy(IndexNode& indexNode);
+		int* getDirectBlocks();
+		int* getIndirectBlock();
 };
 #endif
