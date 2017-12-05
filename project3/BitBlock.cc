@@ -27,6 +27,14 @@ bool BitBlock::isBitSet(int whichBit)
 	return (bytes[whichBit/8] & (char)( 1 << ( whichBit%8 ) ) ) != 0;
 }
 
+int BitBlock::getBit(int whichBit){
+	if((bytes[whichBit/8] & (char)( 1 << ( whichBit%8 ) ) ) != 0){
+		return 1;
+	} else{
+		return 0;
+	}
+}
+
 void BitBlock:: resetBit(int whichBit)
 {
 	bytes[whichBit/8] &= ~ (char)( 1 << (whichBit%8));

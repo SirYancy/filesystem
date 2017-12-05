@@ -110,6 +110,14 @@ int Kernel::getErrno()
 }
 
 /**
+ * Get the current process context.
+ */
+ProcessContext * Kernel::getProcess()
+{
+	return &process;
+}
+
+/**
  * Closes the specified file descriptor.
  * <p>
  * Simulates the unix system call:
@@ -865,6 +873,35 @@ int Kernel::open( char * pathname , int flags )
 	fileDescriptor->setIndexNodeNumber( indexNodeNumber ) ;
 
 	return open( fileDescriptor ) ;
+}
+
+FileDescriptor* Kernel::getFileDescriptor( char * pathname , int flags )
+{
+	// get the full path name
+	char * fullPath = getFullPath( pathname ) ;
+
+	IndexNode indexNode;
+	short indexNodeNumber = findIndexNode(fullPath , indexNode);
+	
+	if( indexNodeNumber < 0 )
+	{
+		cout << "invalid index node " << endl;
+		FileDescriptor* err;
+		return err;
+	}
+
+	// ??? return (Exxx) if the file is not readable 
+	// and was opened O_RDONLY or O_RDWR
+
+	// ??? return (Exxx) if the file is not writable 
+	// and was opened O_WRONLY or O_RDWR
+
+	// set up the file descriptor
+	FileDescriptor * fileDescriptor = new FileDescriptor( 
+			openFileSystems, indexNode , flags ) ;
+	fileDescriptor->setIndexNodeNumber( indexNodeNumber ) ;
+
+	return fileDescriptor;
 }
 
 /**

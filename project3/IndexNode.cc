@@ -47,6 +47,16 @@ short IndexNode::getMode()
 	return mode ;
 }
 
+int* IndexNode::getDirectBlocks(){
+	int *c = new int[MAX_DIRECT_BLOCKS];
+    for (int i = 0; i < MAX_DIRECT_BLOCKS; i++) c[i] = directBlocks[i];
+    return c;
+} 
+
+int* IndexNode::getIndirectBlock(){
+	return indirectBlock;
+} 
+
 /**
  * Set the number of links for this IndedNode.
  * @param newNlink the number of links
@@ -119,7 +129,7 @@ int IndexNode::getBlockAddress(int block)
 	}
 	//include indirect block
 	else if(block >= MAX_DIRECT_BLOCKS && block < MAX_FILE_BLOCKS){
-		// cout << "got address of indirectBlock" << endl;
+		//cout << "got address of indirectBlock" << endl;
 		return(indirectBlock[block - MAX_DIRECT_BLOCKS]);
 	}
 	else
@@ -143,7 +153,7 @@ void IndexNode::setBlockAddress(int block , int address)
 		directBlocks[block] = address ;
 	}
 	else if(block >= MAX_DIRECT_BLOCKS && block < MAX_FILE_BLOCKS){
-		// cout << "got address of indirectBlock" << endl;
+		//cout << "set address of indirectBlock" << endl;
 		indirectBlock[block - MAX_DIRECT_BLOCKS] = address;
 	}
 	else
@@ -297,7 +307,7 @@ void IndexNode::read(char * buffer , int offset)
 		indirectBlock[i] = b2 << 16 | b1 << 8 | b0 ; 
 	}
 
-	// leave room for indirectBlock, doubleIndirectBlock, tripleIndirectBlock
+	// leave room for doubleIndirectBlock, tripleIndirectBlock
 
 	// leave room for atime, mtime, ctime
 }

@@ -6,7 +6,7 @@ debug: GCCFLAGS += -g
 debug: $(OBJECTS)
 debug: all
 
-all: mkfs ls cat tee ln rm cp dump mkdir
+all: mkfs ls cat tee ln rm cp dump mkdir fsck
 
 cp: cp.cc Kernel.o IndexNode.o FileDescriptor.o DirectoryEntry.o ProcessContext.o FileSystem.o Stat.o BitBlock.o Block.o SuperBlock.o
 	$(GCC) $(GCCFLAGS) cp.cc Kernel.o IndexNode.o FileDescriptor.o DirectoryEntry.o ProcessContext.o FileSystem.o Stat.o BitBlock.o Block.o SuperBlock.o -o cp
@@ -22,6 +22,9 @@ rm: rm.cc Kernel.o IndexNode.o FileDescriptor.o DirectoryEntry.o ProcessContext.
 
 ls: ls.cc Stat.o DirectoryEntry.o Kernel.o FileSystem.o FileDescriptor.o ProcessContext.o
 	$(GCC) $(GCCFLAGS) ls.cc Stat.o FileDescriptor.o FileSystem.o BitBlock.o IndexNode.o DirectoryEntry.o Block.o SuperBlock.o ProcessContext.o Kernel.o -o ls
+
+fsck: fsck.cc Stat.o DirectoryEntry.o Kernel.o FileSystem.o FileDescriptor.o ProcessContext.o
+	$(GCC) $(GCCFLAGS) fsck.cc Stat.o FileDescriptor.o FileSystem.o BitBlock.o IndexNode.o DirectoryEntry.o Block.o SuperBlock.o ProcessContext.o Kernel.o -o fsck
 
 mkdir: mkdir.cc Stat.o FileDescriptor.o FileSystem.o BitBlock.o IndexNode.o DirectoryEntry.o Block.o SuperBlock.o ProcessContext.o Kernel.o
 	$(GCC) $(GCCFLAGS) mkdir.cc Stat.o FileDescriptor.o FileSystem.o BitBlock.o IndexNode.o DirectoryEntry.o Block.o SuperBlock.o ProcessContext.o Kernel.o -o mkdir

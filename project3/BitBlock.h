@@ -9,6 +9,7 @@ class BitBlock : public Block
 		BitBlock(short blockSize);
 		void setBit(int whichBit);
 		void setBit(int whichBit, bool value);
+		int getBit(int whichBit);
 		bool isBitSet(int whichBit);
 		void resetBit(int whichBit);
 };
