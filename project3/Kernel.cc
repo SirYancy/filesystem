@@ -526,7 +526,7 @@ int Kernel::link(char * oldPathName, char * newPathName)
 //					cout << "lseek status" << seek_status << endl;
 					if(seek_status < 0)
 					{
-						cout << PROGRAM_NAME << ": error during seek in creat";
+						cout << PROGRAM_NAME << ": error during seek in link";
 						exit( EXIT_FAILURE );
 					}
 
@@ -693,7 +693,7 @@ int Kernel::unlink(char * pathname)
 
     if(nlink <= 1)
     {
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 20; i++)
         {
             int block = inode.getBlockAddress(i);
             if(block != FileSystem::NOT_A_BLOCK)

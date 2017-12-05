@@ -20,7 +20,7 @@ class IndexNode
 		unsigned short gid;
 		int size;
 		int directBlocks[10];
-		int * indirectBlock;//Not yet implemented.
+		int * indirectBlock;
 		int doubleIndirectBlock;//Not yet implemented.
 		int tripleIndirectBlock;//Not yet implemented.
 		int atime;//Not yet implemented.
